@@ -1,0 +1,7 @@
+// https://leetcode.com/problems/product-sales-analysis-i
+
+# Write your MySQL query statement below
+#Write a solution to report the product_name, year, and price for each sale_id in the Sales table.
+select Product.product_name, Sales.year, Sales.price from Sales
+join Product
+on Sales.product_id = Product.product_id;

@@ -1,0 +1,16 @@
+// https://leetcode.com/problems/exchange-seats
+
+# Write your MySQL query statement below
+#select row_number() over ( order by if ( mod(id,2)=0, id-1, id+1 ) ) as id, student from seat;
+select
+    (case
+        when mod(id,2) != 0 and counts != id then id+1  # odd, not the last one.
+        when mod(id,2) != 0 and counts = id then id     # odd, last one.
+        else id-1      #even, id-1
+    end) as id,
+    student
+from
+    seat,
+    (select count(*) as counts
+     from seat) as seat_counts
+order by id asc;

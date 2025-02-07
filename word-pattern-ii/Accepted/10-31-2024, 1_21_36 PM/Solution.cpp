@@ -1,0 +1,37 @@
+// https://leetcode.com/problems/word-pattern-ii
+
+class Solution {
+public:
+    bool wordPatternMatch(string pattern, string s) {
+        //A string s matches a pattern if there is some bijective mapping of single characters to non-empty strings such that if each character in pattern is replaced by the string it maps to, then the resulting string is s
+        unordered_map<char, string> mp;
+        unordered_map<string, char> re_mp;
+        return dfs(pattern, 0, s, 0, mp, re_mp);
+    }
+    bool dfs(string pattern, int pp, string s, int ps, unordered_map<char, string>& mp, unordered_map<string, char>& re_mp) {
+        if(pp == pattern.size()) 
+            return ps == s.size();
+        if(mp.find(pattern[pp]) != mp.end() ) {
+            string match = mp[pattern[pp]];
+            if( s.substr(ps, min(match.size(), s.size()-ps) ) == match ) {
+                return dfs(pattern, pp+1, s, ps+match.size(), mp, re_mp);
+            } else
+                return false;
+        } else {
+            for(int j=ps; j<s.size(); j++) {
+                string match = s.substr(ps, j-ps+1);
+                if(re_mp.find(match) != re_mp.end())
+                    continue;  //been match by other char before.
+                mp[pattern[pp]] = match;
+                re_mp[match] = pattern[pp];
+                if(dfs(pattern, pp+1, s, ps+match.size(), mp, re_mp))
+                    return true;
+                //backtracking
+                mp.erase(pattern[pp]);
+                re_mp.erase(match);
+            }
+        }
+        
+        return false;
+    }
+};

@@ -1,0 +1,17 @@
+// https://leetcode.com/problems/movie-rating
+
+# Write your MySQL query statement below
+(Select name as results from movierating 
+join users using(user_id) 
+group by name
+order by count(*) desc, name     #rated by most users.
+limit 1)
+
+union all
+
+(select title as results from movierating 
+join movies using(movie_id) 
+where extract(YEAR_MONTH from created_at) = 202002
+group by title
+order by avg(rating) desc, title     #highest rating.
+limit 1);
